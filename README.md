@@ -17,3 +17,10 @@ this means any application will only see one keyboard(`merged inputs`) pressing 
 
 ## install
 `make install`
+
+## auto-start
+To start the utility on every boot, a sample systemd unit is provided:
+```
+sudo cp mergeinputs.service /etc/systemd/system
+sudo systemctl enable --now mergeinputs
+```

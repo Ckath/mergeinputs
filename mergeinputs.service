@@ -1,0 +1,6 @@
+[Unit]
+Description=Merge multiple keyboards into one input
+[Service]
+ExecStart=/bin/sh -c '/usr/local/bin/mergeinputs /dev/input/by-id/*-kbd'
+[Install]
+WantedBy=multi-user.target
