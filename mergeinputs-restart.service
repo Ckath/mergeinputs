@@ -1,0 +1,12 @@
+[Unit]
+Description=mergeinputs restarter
+After=multi-user.target
+StartLimitIntervalSec=10
+StartLimitBurst=5
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl restart mergeinputs.service
+
+[Install]
+WantedBy=multi-user.target

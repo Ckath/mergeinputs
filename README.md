@@ -18,9 +18,15 @@ this means any application will only see one keyboard(`merged inputs`) pressing 
 ## install
 `make install`
 
-## auto-start
+## auto-start and reload on device change
 To start the utility on every boot, a sample systemd unit is provided:
 ```
 sudo cp mergeinputs.service /etc/systemd/system
 sudo systemctl enable --now mergeinputs
+```
+
+If you want to restart mergeinputs on device changes to handle hotplugging of keyboards, use the mergeinputs-restart units:
+```
+sudo cp mergeinputs-restart.* /etc/systemd/system
+sudo systemctl enable --now mergeinputs-restart.path
 ```

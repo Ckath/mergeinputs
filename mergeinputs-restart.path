@@ -1,0 +1,6 @@
+[Path]
+Unit=mergeinputs-restart.service
+PathChanged=/dev/input/by-id
+
+[Install]
+WantedBy=multi-user.target
