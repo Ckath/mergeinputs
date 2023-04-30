@@ -2,5 +2,9 @@
 Unit=mergeinputs-restart.service
 PathChanged=/dev/input/by-id
 
+[Unit]
+StartLimitIntervalSec=5
+StartLimitBurst=20
+
 [Install]
 WantedBy=multi-user.target

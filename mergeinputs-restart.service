@@ -1,8 +1,8 @@
 [Unit]
 Description=mergeinputs restarter
 After=multi-user.target
-StartLimitIntervalSec=10
-StartLimitBurst=5
+StartLimitIntervalSec=5
+StartLimitBurst=20
 
 [Service]
 Type=oneshot
