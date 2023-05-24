@@ -1,6 +1,6 @@
 [Path]
 Unit=mergeinputs-restart.service
-PathChanged=/dev/input/by-id
+PathChanged=/dev/input/by-path
 
 [Unit]
 StartLimitIntervalSec=5

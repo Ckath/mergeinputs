@@ -4,7 +4,7 @@ for some reason theres some issues using multiple keyboards simultaneously in li
 ## usage
 ```
 mergeinputs inputeventpaths
-example to merge all keyboards: mergeinputs /dev/input/by-id/*-kbd
+example to merge all keyboards: mergeinputs /dev/input/by-path/*-kbd
 ```
 depending on your distro you might either need the `input` group or run mergeinputs as root.
 
