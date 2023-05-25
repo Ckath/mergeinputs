@@ -1,7 +1,12 @@
 [Unit]
 Description=Merge multiple keyboards into one input
 After=multi-user.target
+ConditionPathExistsGlob=/dev/input/by-path/*-kbd
+StartLimitIntervalSec=5
+StartLimitBurst=20
+
 [Service]
-ExecStart=/bin/sh -c '/usr/local/bin/mergeinputs /dev/input/by-id/*-kbd'
+ExecStart=/bin/sh -c '/usr/local/bin/mergeinputs /dev/input/by-path/*-kbd'
+
 [Install]
 WantedBy=multi-user.target
