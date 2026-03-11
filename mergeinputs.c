@@ -9,6 +9,7 @@
 
 int fdo;
 pthread_t *threads;
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 
 static void
 emit(int type, int code, int val)
@@ -21,11 +22,12 @@ emit(int type, int code, int val)
    /* timestamp values below are ignored */
    ie.time.tv_sec = 0;
    ie.time.tv_usec = 0;
-
+   pthread_mutex_lock(&lock);
    write(fdo, &ie, sizeof(ie));
+   pthread_mutex_unlock(&lock);
 }
 
-static void
+static void*
 input_redirect(char *path)
 {
 	int fdi = open(path, O_RDONLY);
@@ -37,17 +39,18 @@ input_redirect(char *path)
 				path, strerror(errno));
 	}
 	struct input_event ev;
-	while (read(fdi, &ev, sizeof(ev))) {
+	while (read(fdi, &ev, sizeof(ev)) > 0) {
 		emit(ev.type, ev.code, ev.value);
 	}
 	fprintf(stderr, "lost input %s: %s\n",
 			path, strerror(errno));
+    return NULL;
 }
 
 int
 main(int argc, char *argv[])
 {
-	if (argc < 1 || !strcmp(argv[1], "-h") || !strcmp(argv[1], "--help")) {
+	if (argc < 2 || !strcmp(argv[1], "-h") || !strcmp(argv[1], "--help")) {
 		fputs("mergeinputs inputeventpaths\n", stderr);
 		exit(1);
 	}
@@ -77,8 +80,7 @@ main(int argc, char *argv[])
 	}
 
 	/* register virtual 'merged' device in uinput */
-	struct uinput_setup usetup;
-	memset(&usetup, 0, sizeof(usetup));
+	struct uinput_setup usetup = {};
 	usetup.id.bustype = BUS_USB;
 	usetup.id.vendor = 0xC81D;
 	usetup.id.product = 0xC800;
@@ -88,8 +90,8 @@ main(int argc, char *argv[])
 	sleep(1); /* give kernel a chance to recognize it */
 
 	/* create a redirect thread for each input */
+    threads = malloc(sizeof(pthread_t) * (argc - 1));
 	for (int a = 1; a < argc; ++a) {
-		threads = realloc(threads, sizeof(pthread_t)*a);
 		pthread_create(&threads[a-1], NULL, (void *)input_redirect, argv[a]);
 	}
 
